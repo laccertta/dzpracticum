@@ -41,8 +41,7 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 
 func distance(steps int, height float64) float64 {
 	// TODO: реализовать функцию
-	stepLen := lenStep + height*stepLengthCoefficient
-    distM := float64(steps) * stepLen
+    distM := float64(steps) * lenStep
     return distM / mInKm
 }
 
@@ -97,7 +96,7 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 
 func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
 	// TODO: реализовать функцию
-	if steps <= 0  weight <= 0  height <= 0 || duration <= 0 {
+	if steps <= 0 || weight <= 0 || height <= 0 || duration <= 0 {
         return 0, errors.New("Некорректные параметры")
     }
     speed := meanSpeed(steps, height, duration)
@@ -108,7 +107,7 @@ func RunningSpentCalories(steps int, weight, height float64, duration time.Durat
 
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
 	// TODO: реализовать функцию
-    if steps <= 0  weight <= 0  height <= 0 || duration <= 0 { // Алгоритм 1.
+    if steps <= 0 || weight <= 0 || height <= 0 || duration <= 0 { // Алгоритм 1.
         return 0, errors.New("некорректные параметры")
     }
 

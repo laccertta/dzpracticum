@@ -6,8 +6,9 @@ import (
 	"strconv"
 	"strings"
 	"errors"
+	"log"
 
-	"dzpracticum/internal/spentcalories"
+	"github.com/Yandex-Practicum/tracker/internal/spentcalories"
 )
 
 const (
@@ -33,6 +34,9 @@ func parsePackage(data string) (int, time.Duration, error) {
 	duration, err := time.ParseDuration(parts[1])//Алгоритм 5.
     if err != nil{
 		return 0, 0, err
+	}	
+	if duration <= 0{
+		return 0, 0, errors.New("Lkbntkmyjcnm ifuf ljk;yf ,snm ,jkmit 0")
     }
 	return steps, duration, nil//Алгоритм 6.
 }
@@ -41,21 +45,22 @@ func DayActionInfo(data string, weight, height float64) string {
 	// TODO: реализовать функцию
 	steps, duration, err := parsePackage(data) //Алгоритм 1.
 	if err != nil{
-		fmt.Println("Ошибка ", err)
+		log.Println("Ошибка ", err)
 		return ""
 	} 
 	if steps <= 0 {  //Алгоритм 2.
 		return  ""
 	}
+ 
 
-	distanceM := float64(steps)*stepLength //Алгоритм 3.
-	distanceKm := distanceM/mInKm //Алгоритм 4.
+	distanceM := float64(steps) * stepLength //Алгоритм 3.
+	distanceKm := distanceM / mInKm //Алгоритм 4.
 
-	calories := spentcalories.WalkingSpentCalories(weight, height, duration, distanceKm) //Алгоритм 5.
-
-	result := fmt.Sprintf( //Алгоритм 6.
-		"Количество шагов: %d. \nДистанция составила %.2f км.\nВы сожгли %.2f ккал.",
-		steps, distanceKm, calories
-	)
+	calories, err := spentcalories.WalkingSpentCalories(steps, weight, height, duration) //Алгоритм 5.
+    if err != nil{
+		log.Println("Ошибка ", err)
+		return ""
+	} 
+	result := fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.", steps, distanceKm, calories)//Алгоритм 6.
 	return result
 }
